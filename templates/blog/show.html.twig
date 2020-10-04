@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<article>
+        <h2>{{ article.title }}</h2>
+        <div class="metadata"> Ecrit le {{ article.createdAt | date('d/m/Y') }} à {{ article.createdAt | date('H:i')}} dans la catégorie sport</div>
+        <div class="content">
+            <img src="{{ article.image }}" alt="image">
+            <p>{{ article.content | raw }}</p>
+            <hr>
+            <p>
+                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis delectus impedit in officiis porro possimus quaerat.
+                    Alias amet animi aperiam aspernatur consequatur culpa dolore, doloribus ducimus, labore maxime nemo, voluptas.
+                </span>
+                <span>Debitis delectus dolorum excepturi molestias obcaecati qui quo repellendus reprehenderit repudiandae, rerum totam voluptas
+                    voluptatem! Commodi dignissimos, dolore fugit id molestiae praesentium quia. Aliquam exercitationem minus necessitatibus nemo, non voluptatibus.
+                </span>
+            </p>
+        </div>
+        <br>
+</article>
+{% endblock %}
