@@ -19,32 +19,59 @@ class ArticleRepository extends ServiceEntityRepository
         parent::__construct($registry, Article::class);
     }
 
-    // /**
-    //  * @return Article[] Returns an array of Article objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function updateQuery($id, $data)
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $queryBuilder = $this->createQueryBuilder('a')
+            ->update('App:Article', 'a')
+            ->set('a.title', '?1')
+            ->set('a.content', '?2')
+            ->set('a.image', '?3')
+            ->where('a.id = :id')
+            ->setParameter(1, $data->getTitle())
+            ->setParameter(2, $data->getContent())
+            ->setParameter(3, $data->getImage())
+            ->setParameter('id', $id);
+        $queryBuilder->getQuery()->execute();
 
-    /*
-    public function findOneBySomeField($value): ?Article
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        /**
+         * Affichage des changments
+         */
+        $queryBuilder = $this->createQueryBuilder('a')
+            ->select('a.title', 'a.content')
+            ->where('a.id = :id')
+            ->setParameter('id', $id);
+        return $queryBuilder->getQuery()->getResult();
+
     }
-    */
+
+    public function deleteQuery($id)
+    {
+        $qb = $this->createQueryBuilder('a')
+                    ->delete('App:Article', 'a')
+                    ->where('a.id = :id')
+                    ->setParameter('id', $id)
+        ;
+        return $qb->getQuery()->execute();
+    }
+
+    public function deleteQueryTest($idArticle, $id)
+    {
+//    ('u.Phonenumbers', 'p', Expr\Join::WITH, 'p.is_primary = 1');
+//        *         ->from('User', 'u');
+
+
+        $queryBuilder = $this->createQueryBuilder('a')
+            ->delete('App:Article', 'a')
+            ->from('Article', 'a')
+            ->andWhere('a.id = :id')
+            ->setParameter('id', $idArticle)
+            ->leftJoin('a.comments', 'c', 'WITH', 'c.id');
+//            ->delete('App:Comment', 'c')
+//            ->andWhere('c.id = :id')
+//            ->setParameter('id', $idComment);
+         $queryBuilder->getQuery()->execute();
+    }
+
+
+
 }

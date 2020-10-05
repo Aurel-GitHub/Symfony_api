@@ -7,7 +7,6 @@ use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,14 +14,10 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class ArticleApiController extends AbstractController
 {
-    // Pour l'api lancer un php -S localhost:3000 -t public
+    /**
+     * Pour l'api lancer un php -S localhost:3000 -t public
+     */
 
-    private $repo;
-
-    public function __construct(ArticleRepository $repo, EntityManagerInterface $em)
-    {
-        $this->repo = $repo;
-    }
 
     /**
      * @Route("/api/articles", name="article_api", methods={"GET"})
@@ -34,7 +29,6 @@ class ArticleApiController extends AbstractController
 
     /**
      * @Route("/api/articles", name="articles_post", methods={"POST"})
-     *
      */
     public function post(Request $request, SerializerInterface $serializer, EntityManagerInterface $em)
     {
@@ -49,34 +43,32 @@ class ArticleApiController extends AbstractController
         return $this->json($article, 201, [], ['groups' => 'article:read']);
     }
 
-
-
     /**
-     * @Route("/api/articles/{id}", name="article_update", methods={"PUT"})
+     * @Route("/api/articles/{id}", name="article_update", methods={"PATCH"})
      */
-    public function update($id, Request $request, ArticleRepository $repository, EntityManagerInterface $em)
+    public function patch(SerializerInterface $serializer,$id, Request $request, ArticleRepository $repository)
     {
-        $article = $repository->find($id);
-        $data = json_decode($request->getContent(), true);
+        $data = $request->getContent();
+        $json = $serializer->deserialize($data, Article::class, 'json');
 
-        empty($data['title']) ? true : $article->setTitle($data['title']);
-        empty($data['content']) ? true : $article->setContent($data['content']);
-        empty($data['image']) ? true :$article->setImage($data['image']);
+        $article = $repository->updateQuery($id, $json);
 
-        $em->persist($article);
-        $em->flush();
-
-        return $this->json($article, 201, [], ['groups' => 'article:read']);
+        return $this->json($article, '201', [], ['groups' => 'article:read']);
     }
 
 
     /**
+     * @todo casscade pour le delete ?
      * @Route("/api/articles/{id}", name="article_delete", methods={"DELETE"})
      */
-    public function delete($id, ArticleRepository $repository, EntityManagerInterface $em, Request $request)
-    {
-//        TODO
-    }
+//    public function delete($id, ArticleRepository $repository, EntityManagerInterface $em, Request $request)
+//    {
+//        $data = $request->getContent();
+//
+//        $article = $repository->deleteQueryTest($id, $data);
+//
+//        return new Response($article, '202');
+//    }
     /**
      * @param ArticleRepository $repository
      * @return \Symfony\Component\HttpFoundation\JsonResponse
@@ -90,6 +82,7 @@ class ArticleApiController extends AbstractController
 
 
     /**
+     * @todo à faire pour les filtres
      * @Route("api/articles", name="api_articles_post", methods={"GET"})
      */
     public function byDateDesc()
@@ -97,6 +90,9 @@ class ArticleApiController extends AbstractController
         //TODO
     }
 
+    /**
+     * @todo à faire pour les filtres
+     */
     public function byComment()
     {
         //TODO
