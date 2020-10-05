@@ -2,26 +2,47 @@
 
 {% block title %}Création de l'article{% endblock %}
 
+{#{% form_theme form 'bootstrap_4_layout.html.twig' %}#}
+{% use "bootstrap_4_layout.html.twig" %}
+
 {% block body %}
     <br>
     <h2>Formulaire de l'article</h2>
 
     {{ form_start(article) }}
 
-    <div class="form-group">
-        <label for="">Titre</label>
-        {{ form_widget(article.title) }}
-    </div>
-    <div class="form-group">
-        <label for="">Contenu</label>
-        {{ form_widget(article.content) }}
-    </div>
+    {{ form_widget(article) }}
 
-    <div class="form-group">
-        <label for="">Image</label>
-        {{ form_widget(article.image) }}
-    </div>
-
+{#    <div class="form-group">#}
+{#        <label for="">Titre</label>#}
+{#        {{ form_widget(article.title) }}#}
+{#    </div>#}
+{#    <div class="form-group">#}
+{#        <label for="">Contenu</label>#}
+{#        {{ form_widget(article.content) }}#}
+{#    </div>#}
+{#    <div class="form-group">#}
+{#        <label for="">Image</label>#}
+{#        {{ form_widget(article.image) }}#}
+{#    </div>#}
+{#    <div class="form-group">#}
+{#        <label for="">Catégories</label>#}
+{#        {{ form_widget(article.category) }}#}
+{#    </div>#}
+{#    <button type="submit" class="btn btn-secondary">#}
+{#        {% if editMode %}#}
+{#        Enregistrer#}
+{#        {% else %}#}
+{#        Créer#}
+{#        {% endif %}#}
+{#    </button>#}
+<button type="submit" class="btn btn-secondary">
+            {% if editMode %}
+            Enregistrer
+            {% else %}
+            Créer
+            {% endif %}
+        </button>
     {{ form_end(article) }}
 
 {% endblock %}
