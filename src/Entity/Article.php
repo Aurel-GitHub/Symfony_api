@@ -6,6 +6,7 @@ use App\Repository\ArticleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -17,11 +18,13 @@ class Article
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("article:read")
      */
     private $id;
 
     /**
      * @Assert\Length(min= 3, max= 255, minMessage="Veuillez entrer un min de 3 caractères et de 255 max merci !")
+     * @Groups("article:read")
      * @ORM\Column(type="string", length=255)
      */
     private $title;
@@ -29,22 +32,25 @@ class Article
     /**
      * @Assert\Length(min= 10, minMessage="Veuillez entrer un minimum de 10 caractères")
      * @ORM\Column(type="text")
+     * @Groups("article:read")
      */
     private $content;
 
     /**
      * @Assert\Url()
      * @ORM\Column(type="string", length=255)
+     * @Groups("article:read")
      */
     private $image;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups("article:read")
      */
     private $createdAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="articles")
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="articles", cascade="all")
      * @ORM\JoinColumn(nullable=false)
      */
     private $category;
