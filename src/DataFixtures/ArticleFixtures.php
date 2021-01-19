@@ -31,7 +31,7 @@ class ArticleFixtures extends Fixture
 
                 $article->setTitle($faker->sentence())
                         ->setContent($content)
-                        ->setImage($faker->imageUrl())
+                        ->setImage('https://via.placeholder.com/350x150')
                         ->setCreatedAt($faker->dateTimeBetween('-6 months'))
                         ->setCategory($category);
                 $manager->persist($article);

@@ -53,7 +53,7 @@ class ArticleApiController extends AbstractController
 
         $article = $repository->updateQuery($id, $json);
 
-        return $this->json($article, '201', [], ['groups' => 'article:read']);
+        return $this->json($article, 201, [], ['groups' => 'article:read']);
     }
 
 
@@ -90,12 +90,6 @@ class ArticleApiController extends AbstractController
         //TODO
     }
 
-    /**
-     * @todo à faire pour les filtres
-     */
-    public function byComment()
-    {
-        //TODO
-    }
+
 
 }
